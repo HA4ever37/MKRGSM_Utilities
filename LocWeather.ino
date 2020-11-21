@@ -19,7 +19,7 @@ void setup() {
   Serial.begin(9600);
   while (!Serial); // wait for serial port to connect. Needed for native USB port only
 
-  Serial.println("Starting Arduino web client.");
+  Serial.println("Starting Arduino web client...");
   // connection state
   bool connected = false;
 
@@ -36,10 +36,10 @@ void setup() {
   }
 
   String path = "/data/2.5/weather?lon=";
-  Serial.println(F("Connected!"));
+  Serial.println(F("GPRS/3G Connected!"));
   location.begin();
   while (!location.available());
-  Serial.println(F("Waiting to get better location accuracy"));
+  Serial.println(F("Waiting for better location accuracy"));
   while (location.accuracy() > 1000) //Unfortunately this can take a very long time! dammit SARA-U201!
     if (location.available())
       Serial.print('.');
@@ -48,7 +48,7 @@ void setup() {
   path += location.latitude();
   path += F("&units=metric&appid=0a3456488cb52d167293ee9ca1f00539"); // Please use your own AppID instead of using mine :)
   //Serial.println(server + path);
-  Serial.println(F("\nconnecting..."));
+  Serial.println(F("\nConnecting to the weather info server..."));
 
   // if you get a connection, report back via serial:
   if (client.connect(server, port)) {
@@ -78,7 +78,7 @@ void loop() {
     char split = '"';
     int pos = str.indexOf(F("description\":\"")) + 14;
     String weather = str.substring(pos, str.indexOf(split, pos));
-    Serial.println(F("Here is the weather for today:"));
+    Serial.println(F("Here is the weather information for today:"));
     weather[0] = toupper(weather[0]);
     Serial.println(weather);
     split = ',';
@@ -106,7 +106,7 @@ void loop() {
     Serial.println(F(" m/s"));
     split = '\"';
     pos = str.indexOf(F("name\":")) + 7;
-    Serial.print(F("For the location: "));
+    Serial.print(F("Location name: "));
     Serial.println(str.substring(pos, str.indexOf(split, pos)));
   }
   // if the server's disconnected, stop the client and blick the bulitin Led forever
