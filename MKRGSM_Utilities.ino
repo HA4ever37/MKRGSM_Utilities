@@ -52,10 +52,8 @@ void GSMloc() {
 String request(String server, String path, bool secure) {
   if (!connected)
     GSMconnect();
-  char pathChar[path.length() + 1];
   char serChar[server.length() + 1];
   strcpy(serChar, server.c_str());
-  strcpy(pathChar, path.c_str());
   if (gprs.ping(F("google.com")) < 0) {
     restModem();
     GSMconnect();
@@ -198,7 +196,7 @@ void restModem() {
 }
 
 void updateTime() {
-  if (!timeSync) {
+  if (!timeSync)
     if (!connected)
       GSMconnect();
     else {
@@ -206,7 +204,6 @@ void updateTime() {
       rtc.setEpoch(gsmAccess.getTime());
       timeSync = true;
     }
-  }
 }
 
 void showTime() {
@@ -216,7 +213,7 @@ void showTime() {
   print2digits(rtc.getMonth());
   Serial.print("/");
   print2digits(rtc.getYear());
-  Serial.print(" ");
+  Serial.print("  ");
   print2digits(rtc.getHours());
   Serial.print(":");
   print2digits(rtc.getMinutes());
